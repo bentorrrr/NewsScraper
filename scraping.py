@@ -14,11 +14,11 @@ def scrape_article_details(article_url):
     try:
       detail_res = requests.get(article_url, headers=HEADERS)
       detail_soup = BeautifulSoup(detail_res.content, "html.parser")
-      body_container = detail_soup.select_one("div.css-nh9sg4.evs3ejl67")
+      body_container = detail_soup.select("div.css-nh9sg4.evs3ejl67")
       if not body_container:
           body_container = detail_soup.select_one("div[itemprop='articleBody']") 
       print(body_container)
-      content = body_container.get_text("\n", strip=True) if body_container else "N/A"
+      content = "\n".join([container.get_text("\n", strip=True) for container in body_container]) if body_container else "N/A"
 
       timestamp_tag = detail_soup.select_one("div.css-4rs0jl.e1qfz2z0")
       timestamp = timestamp_tag.get_text(strip=True) if timestamp_tag else "N/A"
